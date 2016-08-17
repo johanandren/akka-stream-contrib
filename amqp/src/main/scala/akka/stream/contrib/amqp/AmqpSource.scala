@@ -113,11 +113,7 @@ final class AmqpSource(settings: AmqpSourceSettings, bufferSize: Int) extends Gr
       if (isAvailable(out)) {
         pushAndAckMessage(message)
       } else {
-        if (queue.size + 1 > bufferSize) {
-          failStage(new RuntimeException(s"Reached maximum buffer size $bufferSize"))
-        } else {
-          queue.enqueue(message)
-        }
+        queue.enqueue(message)
       }
     }
 
