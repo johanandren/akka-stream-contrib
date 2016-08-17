@@ -1,5 +1,5 @@
 lazy val root = (project in file(".")).
-  aggregate(contrib, mqtt)
+  aggregate(contrib, mqtt, amqp)
 
 lazy val contrib = project.
   enablePlugins(AutomateHeaderPlugin)
