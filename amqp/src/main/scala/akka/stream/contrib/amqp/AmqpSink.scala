@@ -30,11 +30,6 @@ object AmqpSink {
   def create(settings: AmqpSinkSettings): akka.stream.javadsl.Sink[OutgoingMessage, NotUsed] =
     akka.stream.javadsl.Sink.fromGraph(new AmqpSink(settings))
 
-  /**
-   * Internal API
-   */
-  private val defaultAttributes = Attributes.name("AmsqpSink")
-    .and(ActorAttributes.dispatcher("akka.stream.default-blocking-io-dispatcher"))
 }
 
 final class AmqpSink(settings: AmqpSinkSettings) extends GraphStage[SinkShape[OutgoingMessage]] with AmqpConnector { stage =>
@@ -44,7 +39,8 @@ final class AmqpSink(settings: AmqpSinkSettings) extends GraphStage[SinkShape[Ou
 
   override def shape: SinkShape[OutgoingMessage] = SinkShape.of(in)
 
-  override protected def initialAttributes: Attributes = defaultAttributes
+  override protected def initialAttributes: Attributes = Attributes.name("AmsqpSink")
+    .and(ActorAttributes.dispatcher("akka.stream.default-blocking-io-dispatcher"))
 
   override def createLogic(inheritedAttributes: Attributes): GraphStageLogic = new GraphStageLogic(shape) with AmqpConnectorLogic {
     override val settings = stage.settings
